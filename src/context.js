@@ -128,14 +128,47 @@ class ProductProvider extends Component {
         // Variables for seting temp values for cart        
         let tempCart = [...this.state.cart];
         // Selecting an incrementing product bz matching id
-        const selectedProduct = tempCart.fint(item => item.id === id);
+        const selectedProduct = tempCart.find(item => item.id === id);
+        // Looking next for index of product in tempCart
+        const index = tempCart.indexOf(selectedProduct);
+        // Assigning this product to variable
+        const product = tempCart[index];
+        // Changing product count values by incrementing by one with every click
+        product.count = product.count + 1;
+        // Changing product total by adding values with every new product
+        product.total = product.count * product.price;
 
+        // Changing values to the state after some changes
+        // First we add new values to the cart
+        // After that we change total values
+        this.setState(() => { return { cart: [...tempCart] } }, () => { this.addTotals() })
     }
 
 
     // 7. Decrementation of products added to cart
     decrement = (id) => {
-        console.log('This is decrement method');
+        // Variables for seting temp values for cart        
+        let tempCart = [...this.state.cart];
+        // Selecting an incrementing product bz matching id
+        const selectedProduct = tempCart.find(item => item.id === id);
+        // Looking next for index of product in tempCart
+        const index = tempCart.indexOf(selectedProduct);
+        // Assigning this product to variable
+        const product = tempCart[index];
+        // Changing product count values by decrementing by one with every click
+        product.count = product.count - 1;
+
+        // If the number of products in cart is equal to zero we want to remove it from cart
+        if (product.count === 0) {
+            this.removeItem(id)
+        } else {
+            // Changing product total by adding values with every new product
+            product.total = product.count * product.price;
+            // Changing values to the state after some changes
+            // First we add new values to the cart
+            // After that we change total values
+            this.setState(() => { return { cart: [...tempCart] } }, () => { this.addTotals() })
+        }
     }
 
 
